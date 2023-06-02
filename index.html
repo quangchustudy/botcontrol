@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/javascript" src="<get from waf captcha integration>" defer></script>
+  </head>
+
+  <script type="text/javascript">
+    // TODO: add api key
+
+    function showMyCaptcha() {
+      var container = document.querySelector("#my-captcha-container");
+
+      AwsWafCaptcha.renderCaptcha(container, {
+        apiKey: "<get from captcha integration>",
+        onSuccess: captchaExampleSuccessFunction,
+        onError: captchaExampleErrorFunction,
+      });
+    }
+
+    function captchaExampleSuccessFunction(wafToken) {
+      // Captcha completed. wafToken contains a valid WAF token. Store it for
+      // use later or call AwsWafIntegration.fetch() to use it easily.
+      // It will expire after a time, so calling AwsWafIntegration.getToken()
+      // again is advised if the token is needed later on, outside of using the
+      // fetch wrapper.
+
+      // Use WAF token to access protected resources
+      console.log("waf token", wafToken);
+      AwsWafIntegration.fetch(
+        "<get from website domain name",
+        {
+          method: "GET",
+        }
+      )
+        .then((e) => console.log("fetch ok"))
+        .catch((e) => console.log("fetch fail"));
+      console.log("captcha success");
+    }
+
+    function captchaExampleErrorFunction(error) {
+      /* Do something with the error */
+      console.log("captcha error");
+    }
+  </script>
+
+  <body>
+    hello
+    <div id="my-captcha-container">
+      <!-- The contents of this box will be replaced by the captcha widget -->
+    </div>
+    <button onclick="showMyCaptcha()">show captcha</button>
+  </body>
+</html>
